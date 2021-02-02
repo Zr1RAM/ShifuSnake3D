@@ -5,26 +5,26 @@ using UnityEngine;
 public class SnakeController : MonoBehaviour
 {
 
-    public List<Transform> bodyParts = new List<Transform>();
+    public List<Transform> BodyParts = new List<Transform>();
 
-    public float minDistance = 0.25f;
+    public float BodyPartsMinDistance = 0.25f;
 
-    public int beginSize;
+    public int SnakeSize;
     
     public float speed = 1;
     public float rotationSpeed = 50;
 
-    public GameObject bodyprefabs;
+    public GameObject BodyPrefab;
 
-    private float dis;
-    private Transform curBodyPart;
-    private Transform PrevBodyPart;
+    private float CurrentDistBetweenBodyParts;
+    private Transform CurrentBodyPart;
+    private Transform PreviousBodyPart;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        for (int i = 0; i < beginSize - 1; i++)
+        for (int i = 0; i < SnakeSize - 1; i++)
         {
 
             AddBodyPart();
@@ -49,29 +49,29 @@ public class SnakeController : MonoBehaviour
         if (Input.GetKey(KeyCode.W))
             curspeed *= 2;
 
-        bodyParts[0].Translate(bodyParts[0].forward * curspeed * Time.smoothDeltaTime, Space.World);
+        BodyParts[0].Translate(BodyParts[0].forward * curspeed * Time.smoothDeltaTime, Space.World);
 
         if (Input.GetAxis("Horizontal") != 0)
-            bodyParts[0].Rotate(Vector3.up * rotationSpeed * Time.deltaTime * Input.GetAxis("Horizontal"));
+            BodyParts[0].Rotate(Vector3.up * rotationSpeed * Time.deltaTime * Input.GetAxis("Horizontal"));
 
-        for (int i = 1; i < bodyParts.Count; i++)
+        for (int i = 1; i < BodyParts.Count; i++)
         {
 
-            curBodyPart = bodyParts[i];
-            PrevBodyPart = bodyParts[i - 1];
+            CurrentBodyPart = BodyParts[i];
+            PreviousBodyPart = BodyParts[i - 1];
 
-            dis = Vector3.Distance(PrevBodyPart.position,curBodyPart.position);
+            CurrentDistBetweenBodyParts = Vector3.Distance(PreviousBodyPart.position,CurrentBodyPart.position);
 
-            Vector3 newpos = PrevBodyPart.position;
+            Vector3 newpos = PreviousBodyPart.position;
 
             newpos.y = 0;
 
-            float T = Time.deltaTime * dis / minDistance * curspeed;
+            float T = Time.deltaTime * CurrentDistBetweenBodyParts / BodyPartsMinDistance * curspeed;
 
             if (T > 0.5f)
                 T = 0.5f;
-            curBodyPart.position = Vector3.Slerp(curBodyPart.position, newpos, T);
-            curBodyPart.rotation = Quaternion.Slerp(curBodyPart.rotation, PrevBodyPart.rotation, T);
+            CurrentBodyPart.position = Vector3.Slerp(CurrentBodyPart.position, newpos, T);
+            CurrentBodyPart.rotation = Quaternion.Slerp(CurrentBodyPart.rotation, PreviousBodyPart.rotation, T);
 
 
 
@@ -82,16 +82,16 @@ public class SnakeController : MonoBehaviour
     public void AddBodyPart()
     {
 
-        Transform newpart = (Instantiate (bodyprefabs, bodyParts[bodyParts.Count - 1].position, bodyParts[bodyParts.Count - 1].rotation) as GameObject).transform;
+        Transform newpart = (Instantiate (BodyPrefab, BodyParts[BodyParts.Count - 1].position, BodyParts[BodyParts.Count - 1].rotation) as GameObject).transform;
 
         newpart.SetParent(transform);
 
-        bodyParts.Add(newpart);
+        BodyParts.Add(newpart);
     }
     void OnApplicationQuit()
     {
-        bodyprefabs.transform.position = Vector3.zero;
-        bodyprefabs.transform.rotation = Quaternion.identity;//Quaternion.Euler(Vector3.zero);
+        BodyPrefab.transform.position = Vector3.zero;
+        BodyPrefab.transform.rotation = Quaternion.identity;//Quaternion.Euler(Vector3.zero);
     }
 
 }
