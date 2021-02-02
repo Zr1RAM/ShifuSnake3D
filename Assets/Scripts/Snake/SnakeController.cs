@@ -88,6 +88,11 @@ public class SnakeController : MonoBehaviour
 
         bodyParts.Add(newpart);
     }
+    void OnApplicationQuit()
+    {
+        bodyprefabs.transform.position = Vector3.zero;
+        bodyprefabs.transform.rotation = Quaternion.identity;//Quaternion.Euler(Vector3.zero);
+    }
 
 }
 
