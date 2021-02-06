@@ -35,10 +35,16 @@ public class SnakeController : MonoBehaviour
     public void Move()
     {
         BodyParts[0].Translate(BodyParts[0].forward * speed * Time.smoothDeltaTime, Space.World);
+#if UNITY_EDITOR
         if (Input.GetAxis("Horizontal") != 0)
         {
             BodyParts[0].Rotate(Vector3.up * rotationSpeed * Time.deltaTime * Input.GetAxis("Horizontal"));
-        }   
+        }
+#endif
+        if (GameManager.gameManagerInstance.GetSteeringWheelAxis() != 0)
+        {
+            BodyParts[0].Rotate(Vector3.up * rotationSpeed * Time.deltaTime * GameManager.gameManagerInstance.GetSteeringWheelAxis());
+        }
         for (int i = 1; i < BodyParts.Count; i++)
         {
             CurrentBodyPart = BodyParts[i];
@@ -65,7 +71,6 @@ public class SnakeController : MonoBehaviour
         for (int i = 0; i < SnakeSize - 1; i++)
         {
             Transform SpawnedBodypart = (Instantiate(BodyPrefab) as GameObject).transform;
-            //print("snake body position" + SpawnedBodypart.position);
             SpawnedBodypart.SetParent(transform,false);
             SpawnedBodypart.position = BodyParts[BodyParts.Count - 1].position;
             SpawnedBodypart.rotation = BodyParts[BodyParts.Count - 1].rotation;
@@ -75,7 +80,7 @@ public class SnakeController : MonoBehaviour
     void OnApplicationQuit()
     {
         BodyPrefab.transform.position = Vector3.zero;
-        BodyPrefab.transform.rotation = Quaternion.identity;//Quaternion.Euler(Vector3.zero);
+        BodyPrefab.transform.rotation = Quaternion.identity;
     }
 
 }

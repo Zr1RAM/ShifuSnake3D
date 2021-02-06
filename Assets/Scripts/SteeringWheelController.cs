@@ -15,7 +15,7 @@ public class SteeringWheelController : MonoBehaviour, IDragHandler, IPointerDown
     float MaxSteerAngle = 200f;
     [SerializeField]
     float ReleaseSpeed = 300f;
-    public float SteeringWheelHorizontalAxis;
+    public float SteeringWheelHorizontalAxis = 0;
     void Update()
     {
         if (!isSteeringWheelHeld && SteeringWheelAngle != 0f)
@@ -39,16 +39,16 @@ public class SteeringWheelController : MonoBehaviour, IDragHandler, IPointerDown
     }
     public void OnDrag(PointerEventData data)
     {
-        float NewAngle = Vector2.Angle(Vector2.up, data.position - TouchCenter);
+        float CurrentSteeringWheelAngle = Vector2.Angle(Vector2.up, data.position - TouchCenter);
         if ((data.position - TouchCenter).sqrMagnitude >= 400)
         {
             if (data.position.x > TouchCenter.x)
-                SteeringWheelAngle += NewAngle - PreviousSteeringWheelAngle;
+                SteeringWheelAngle += CurrentSteeringWheelAngle - PreviousSteeringWheelAngle;
             else
-                SteeringWheelAngle -= NewAngle - PreviousSteeringWheelAngle;
+                SteeringWheelAngle -= CurrentSteeringWheelAngle - PreviousSteeringWheelAngle;
         }
         SteeringWheelAngle = Mathf.Clamp(SteeringWheelAngle, -MaxSteerAngle, MaxSteerAngle);
-        PreviousSteeringWheelAngle = NewAngle;
+        PreviousSteeringWheelAngle = CurrentSteeringWheelAngle;
     }
     public void OnPointerUp(PointerEventData data)
     {
