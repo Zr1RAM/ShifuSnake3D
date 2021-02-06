@@ -7,7 +7,6 @@ public class SnakeHeadController : MonoBehaviour
 {
     private void OnCollisionEnter(Collision other)
     {
-        print(other.gameObject.tag);
         if(other.transform.CompareTag("Wall"))
         {
             SnakeRecoilMovement(other.contacts[0].normal);
@@ -15,6 +14,10 @@ public class SnakeHeadController : MonoBehaviour
         if(other.transform.CompareTag("Tile"))
         {
             SnakeWalkedOnTile(other.gameObject.name);
+        }
+        if(other.transform.CompareTag("Pizza"))
+        {
+            SnakeEatsPizza(other.transform);
         }
     }
     void SnakeRecoilMovement(Vector3 wallNormal)
@@ -25,5 +28,9 @@ public class SnakeHeadController : MonoBehaviour
     void SnakeWalkedOnTile(string val)
     {
         GameManager.gameManagerInstance.mapController.DisableTileAt(val);
+    }
+    void SnakeEatsPizza(Transform EatenPizza)
+    {
+        EatenPizza.GetComponent<PizzaController>().PizzaEaten();
     }
 }

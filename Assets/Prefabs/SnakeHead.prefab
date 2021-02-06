@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 7765048546842499422}
   - component: {fileID: 5487060297945418878}
   - component: {fileID: 929221597030422005}
-  - component: {fileID: 1436780237123288385}
   - component: {fileID: -7930987296974723556}
   - component: {fileID: -7672367004704704480}
+  - component: {fileID: 330516980}
   m_Layer: 8
   m_Name: SnakeHead
   m_TagString: Snake
@@ -82,19 +82,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &1436780237123288385
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8107269338920722409}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &-7930987296974723556
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -109,7 +96,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!114 &-7672367004704704480
 MonoBehaviour:
@@ -123,3 +110,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b074d41e996cee439812701bb913b0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!135 &330516980
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8107269338920722409}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.51
+  m_Center: {x: 0, y: 0, z: 0}

@@ -8,7 +8,7 @@ public class MapController : MonoBehaviour
 {
     [SerializeField]
     GameObject TilePrefab;
-    GameObject[,] TileSystem; 
+    GameObject[,] TileSystem;
     // Start is called before the first frame update
     public void MapGeneration(int width,int height)
     {
@@ -16,12 +16,12 @@ public class MapController : MonoBehaviour
         transform.position = new Vector3((float)width/2, 0 ,(float)height/2);
         InitializeTilesSystem(width, height);
     }
-    List<TileCoordinates> AvailableCoordinates, UsedCoordinates;
+    List<TileCoordinate> AvailableCoordinates, UsedCoordinates;
     void InitializeTilesSystem(int Width,int Height)
     {
         TileSystem = new GameObject[Width, Height];
-        AvailableCoordinates = new List<TileCoordinates>();
-        UsedCoordinates = new List<TileCoordinates>();
+        AvailableCoordinates = new List<TileCoordinate>();
+        UsedCoordinates = new List<TileCoordinate>();
         GameObject SpawnedTile;
         Vector3 TileSpawnLocation;
         for (int i =0; i < Width; i++)
@@ -32,7 +32,7 @@ public class MapController : MonoBehaviour
                 SpawnedTile = Instantiate(TilePrefab, TileSpawnLocation, Quaternion.identity);
                 SpawnedTile.name = i.ToString() + "," + j.ToString();
                 SpawnedTile.transform.SetParent(transform,true); 
-                AvailableCoordinates.Add(new TileCoordinates(i, j));
+                AvailableCoordinates.Add(new TileCoordinate(i, j));
                 TileSystem[i, j] = SpawnedTile;
             }
         }
@@ -43,15 +43,19 @@ public class MapController : MonoBehaviour
         string[] CurrentTileName = TileName.Split(',');
         int i = Int32.Parse(CurrentTileName[0]);
         int j = Int32.Parse(CurrentTileName[1]);
-        TileSystem[i, j].GetComponent<MeshRenderer>().enabled = false;
-        UsedCoordinates.Add(new TileCoordinates(i, j));
-        AvailableCoordinates.Remove(new TileCoordinates(i, j));
+        TileSystem[i, j].SetActive(false);
+        UsedCoordinates.Add(new TileCoordinate(i, j));
+        AvailableCoordinates.RemoveAll((Coordinate) => Coordinate.x == i && Coordinate.y == j);
+        if(AvailableCoordinates.Count == 0)
+        {
+            print("gamedone");
+        }
     }
     public void ResetTiles()
     {
         for(int i = 0; i < UsedCoordinates.Count; i++)
         {
-            TileSystem[UsedCoordinates[i].x, UsedCoordinates[i].y].GetComponent<MeshRenderer>().enabled = true;
+            TileSystem[UsedCoordinates[i].x, UsedCoordinates[i].y].SetActive(true);
             AvailableCoordinates.Add(UsedCoordinates[i]);
             UsedCoordinates.RemoveAt(i);
         }
@@ -62,10 +66,10 @@ public class MapController : MonoBehaviour
         return TileSystem[AvailableCoordinates[RandomIndex].x, AvailableCoordinates[RandomIndex].y].transform.position;
     }
     
-    class TileCoordinates
+    class TileCoordinate
     {
         public int x, y;
-        public TileCoordinates(int x, int y)
+        public TileCoordinate(int x, int y)
         {
             this.x = x;
             this.y = y;

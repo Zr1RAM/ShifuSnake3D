@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     float PizzaTimer;
     [HideInInspector]
-    public int Score,NonTraversedTileCount;
+    int Score = 0;
     public MapController mapController;
     bool isPlaying = false; // indicates if the game is in play or pause
     public static GameManager gameManagerInstance;
@@ -25,7 +25,6 @@ public class GameManager : MonoBehaviour
         {
             gameManagerInstance = this;
         }
-        NonTraversedTileCount = MapWidth * MapHeight;
         if(mapController != null)
         {
             mapController.MapGeneration(MapWidth,MapHeight);
@@ -52,7 +51,11 @@ public class GameManager : MonoBehaviour
     }
     void RestartGame()
     {
-
+        Score = 0;
+    }
+    public void PlayerScored()
+    {
+        Score++;
     }
     // Update is called once per frame
     void Update()
