@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 7765048546842499422}
   - component: {fileID: 5487060297945418878}
   - component: {fileID: 929221597030422005}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SnakeBody
-  m_TagString: Untagged
+  m_TagString: Snake
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -25,8 +25,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8107269338920722409}
-  m_LocalRotation: {x: 0, y: 0.4764576, z: 0, w: 0.8791975}
-  m_LocalPosition: {x: 10.559329, y: -5.6210938, z: -9.22208}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_Children: []
   m_Father: {fileID: 0}

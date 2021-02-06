@@ -6,15 +6,14 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField]
     float SnakeSpeed;
-    [SerializeField]
-    int MapWidth, MapHeight;
+    public int MapWidth, MapHeight;
     [SerializeField]
     float PizzaTimer;
     [HideInInspector]
     public int Score,NonTraversedTileCount;
-    [SerializeField]
-    MapController mapController;
+    public MapController mapController;
     bool isPlaying = false; // indicates if the game is in play or pause
+    public static GameManager gameManagerInstance;
     
     void Awake()
     {
@@ -22,6 +21,10 @@ public class GameManager : MonoBehaviour
     }
     void Initialise()
     {
+        if(gameManagerInstance == null)
+        {
+            gameManagerInstance = this;
+        }
         NonTraversedTileCount = MapWidth * MapHeight;
         if(mapController != null)
         {
