@@ -11,70 +11,94 @@ public class SnakeController : MonoBehaviour
 
     public int SnakeSize;
     
-    public float speed = 1;
-    public float rotationSpeed = 50;
+    public float Speed = 1;
+    public float RotationSpeed = 50;
 
-    public GameObject BodyPrefab;
+    [SerializeField]
+    GameObject BodyPrefab;
 
-    private float CurrentDistBetweenBodyParts;
-    private Transform CurrentBodyPart;
-    private Transform PreviousBodyPart;
+    float CurrentDistBetweenBodyParts;
+    Transform CurrentBodyPart;
+    Transform PreviousBodyPart;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        SpawnBodyParts();
+        GameManager.gameManagerInstance.PlayerObject = BodyParts[0].gameObject;
+        SpawnBodyParts(); //Should be called in Game start event
     }
 
     // Update is called once per frame
     void Update()
     {
-        Move();
+        if(GameManager.gameManagerInstance.isPlaying)
+        {
+            Move();
+        }
     }
     public void Move()
     {
-        BodyParts[0].Translate(BodyParts[0].forward * speed * Time.smoothDeltaTime, Space.World);
+        BodyParts[0].Translate(BodyParts[0].forward * Speed * Time.deltaTime, Space.World);
 #if UNITY_EDITOR
         if (Input.GetAxis("Horizontal") != 0)
         {
-            BodyParts[0].Rotate(Vector3.up * rotationSpeed * Time.deltaTime * Input.GetAxis("Horizontal"));
+            BodyParts[0].Rotate(Vector3.up * RotationSpeed * Time.deltaTime * Input.GetAxis("Horizontal"));
         }
 #endif
         if (GameManager.gameManagerInstance.GetSteeringWheelAxis() != 0)
         {
-            BodyParts[0].Rotate(Vector3.up * rotationSpeed * Time.deltaTime * GameManager.gameManagerInstance.GetSteeringWheelAxis());
+            BodyParts[0].Rotate(Vector3.up * RotationSpeed * Time.deltaTime * GameManager.gameManagerInstance.GetSteeringWheelAxis());
         }
-        for (int i = 1; i < BodyParts.Count; i++)
+        if(GameManager.gameManagerInstance.isPlaying)
         {
-            CurrentBodyPart = BodyParts[i];
-            PreviousBodyPart = BodyParts[i - 1];
-            CurrentDistBetweenBodyParts = Vector3.Distance(PreviousBodyPart.position,CurrentBodyPart.position);
-            Vector3 NewPositionForCurrentBodyPart = PreviousBodyPart.position;
-            float Step = Time.deltaTime * CurrentDistBetweenBodyParts / BodyPartsMinDistance * speed;
-            if (Step > BodyPartsMinDistance)
+            for (int i = 1; i < BodyParts.Count; i++)
             {
-                Step = BodyPartsMinDistance;
-            }  
-            CurrentBodyPart.position = Vector3.Slerp(CurrentBodyPart.position, NewPositionForCurrentBodyPart, Step);
-            CurrentBodyPart.rotation = Quaternion.Slerp(CurrentBodyPart.rotation, PreviousBodyPart.rotation, Step);
+                CurrentBodyPart = BodyParts[i];
+                PreviousBodyPart = BodyParts[i - 1];
+                CurrentDistBetweenBodyParts = Vector3.Distance(PreviousBodyPart.position, CurrentBodyPart.position);
+                Vector3 NewPositionForCurrentBodyPart = PreviousBodyPart.position;
+                float Step = Time.deltaTime * CurrentDistBetweenBodyParts / BodyPartsMinDistance * Speed;
+                if (Step > BodyPartsMinDistance)
+                {
+                    Step = BodyPartsMinDistance;
+                }
+                if(Vector3.Distance(CurrentBodyPart.position,PreviousBodyPart.position) > BodyPartsMinDistance)
+                {
+                    CurrentBodyPart.position = Vector3.Slerp(CurrentBodyPart.position, NewPositionForCurrentBodyPart, Step);
+                    CurrentBodyPart.rotation = Quaternion.Slerp(CurrentBodyPart.rotation, PreviousBodyPart.rotation, Step);
+                }
+                //CurrentBodyPart.position = Vector3.Slerp(CurrentBodyPart.position, NewPositionForCurrentBodyPart, Step);
+                //CurrentBodyPart.rotation = Quaternion.Slerp(CurrentBodyPart.rotation, PreviousBodyPart.rotation, Step);
+            }
         }
     }
 
-    void SpawnBodyParts()
+    public void SpawnBodyParts() // used to spawn and respawwn Snake
     {
         float SnakeHeadXpos, SnakeHeadZpos;
         SnakeHeadXpos = Random.Range(0,GameManager.gameManagerInstance.MapWidth) + 0.5f;
         SnakeHeadZpos = Random.Range(0, GameManager.gameManagerInstance.MapHeight) + 0.5f;
         BodyParts[0].position = new Vector3(SnakeHeadXpos, BodyParts[0].position.y, SnakeHeadZpos);
-       
-        for (int i = 0; i < SnakeSize - 1; i++)
+        if(BodyParts.Count != SnakeSize)
         {
-            Transform SpawnedBodypart = (Instantiate(BodyPrefab) as GameObject).transform;
-            SpawnedBodypart.SetParent(transform,false);
-            SpawnedBodypart.position = BodyParts[BodyParts.Count - 1].position;
-            SpawnedBodypart.rotation = BodyParts[BodyParts.Count - 1].rotation;
-            BodyParts.Add(SpawnedBodypart);
+            for (int i = 0; i < SnakeSize - 1; i++)
+            {
+                Transform SpawnedBodyPart = (Instantiate(BodyPrefab) as GameObject).transform;
+                //SpawnedBodyPart.GetComponent<MeshRenderer>().material = BodyParts[0].GetComponent<MeshRenderer>().material;
+                SpawnedBodyPart.SetParent(transform, false);
+                SpawnedBodyPart.position = BodyParts[BodyParts.Count - 1].position;
+                SpawnedBodyPart.rotation = BodyParts[BodyParts.Count - 1].rotation;
+                BodyParts.Add(SpawnedBodyPart);
+            }
+        }
+        else
+        {
+            for(int i = 1; i < SnakeSize; i++)
+            {
+                BodyParts[i].position = BodyParts[i - 1].position;
+                BodyParts[i].rotation = BodyParts[i - 1].rotation;
+            }
         }
     }
     void OnApplicationQuit()

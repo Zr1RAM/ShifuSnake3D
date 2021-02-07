@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -10,10 +11,14 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     float PizzaTimer;
     [HideInInspector]
-    int Score = 0;
+    public int Score = 0;
     public MapController mapController;
     public SteeringWheelController steeringWheelController;
-    bool isPlaying = false; // indicates if the game is in play or pause
+    public UIManager uiManager;
+    //[HideInInspector]
+    public bool isPlaying = true; // indicates if the game is in play or pause
+    [HideInInspector]
+    public GameObject PlayerObject;
     public static GameManager gameManagerInstance;
     
     void Awake()
@@ -28,43 +33,49 @@ public class GameManager : MonoBehaviour
         }
         if(mapController != null)
         {
-            mapController.MapGeneration(MapWidth,MapHeight);
+            mapController.InitializeMapController(MapWidth,MapHeight);
         }
+        uiManager.InitializeUIManager();
     }
-    void StartGame()
+     
+    public void StartGame()
     {
-
+        isPlaying = true;
     }
-    void PlayPause()
+    public void PlayPause(bool val)
     {
-        if (isPlaying)
+        if (val) // true means we are resuming 
         {
-            
+            Time.timeScale = 1;
         }
-        else
+        else // False means we are pausing;
         {
-            
+            Time.timeScale = 0;
         }
+        isPlaying = val;
+        //isPlaying = !isPlaying;
     }
-    void GameOver()
+    public void GameOver()
     {
-
+        PlayPause(false);
+        uiManager.InvokeGameOverEvent();
     }
-    void RestartGame()
+    public void RestartGame()
     {
         Score = 0;
+        mapController.ResetTiles();
     }
     public void PlayerScored()
     {
         Score++;
+        uiManager.UpdateScore(Score);
     }
     public float GetSteeringWheelAxis()
     {
         return steeringWheelController.SteeringWheelHorizontalAxis;
     }
-    // Update is called once per frame
-    void Update()
+    public Vector3 GetAvailableTilePositionInMap()
     {
-        
+        return mapController.AvailableTilePosition();
     }
 }
