@@ -10,6 +10,8 @@ public class UIManager : MonoBehaviour
     Animator CanvasAnimator;
     [SerializeField]
     UnityEvent GameOverEvent, StartGameEvent;
+    [SerializeField]
+    Text LeaderboardText;
     public void InitializeUIManager()
     {
         CanvasAnimator = transform.GetComponent<Animator>();

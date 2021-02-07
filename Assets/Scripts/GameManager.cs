@@ -20,8 +20,10 @@ public class GameManager : MonoBehaviour
     public bool isPlaying = false; // indicates if the game is in play or pause
     [HideInInspector]
     public GameObject PlayerObject;
+    Leaderboards leaderboards;
+    [SerializeField]
+    int MaxNumOfHighScores;
     public static GameManager gameManagerInstance;
-    
     void Awake()
     {
         Initialise();    
@@ -61,6 +63,7 @@ public class GameManager : MonoBehaviour
     {
         PlayPause(false);
         uiManager.InvokeGameOverEvent();
+        CheckWithLeaderBoard();
     }
     public void RestartGame()
     {
@@ -88,5 +91,9 @@ public class GameManager : MonoBehaviour
     public void PlayPizzaLostSoundFromSoundManager()
     {
         soundsManager.PlayPizzaLostSound();
+    }
+    void CheckWithLeaderBoard()
+    {
+
     }
 }
