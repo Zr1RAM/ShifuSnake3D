@@ -26,7 +26,7 @@ public class SnakeController : MonoBehaviour
     void Start()
     {
         GameManager.gameManagerInstance.PlayerObject = BodyParts[0].gameObject;
-        SpawnBodyParts(); //Should be called in Game start event
+        //SpawnBodyParts(); //Should be called in Game start event
     }
 
     // Update is called once per frame
@@ -50,27 +50,24 @@ public class SnakeController : MonoBehaviour
         {
             BodyParts[0].Rotate(Vector3.up * RotationSpeed * Time.deltaTime * GameManager.gameManagerInstance.GetSteeringWheelAxis());
         }
-        if(GameManager.gameManagerInstance.isPlaying)
+        for (int i = 1; i < BodyParts.Count; i++)
         {
-            for (int i = 1; i < BodyParts.Count; i++)
+            CurrentBodyPart = BodyParts[i];
+            PreviousBodyPart = BodyParts[i - 1];
+            CurrentDistBetweenBodyParts = Vector3.Distance(PreviousBodyPart.position, CurrentBodyPart.position);
+            Vector3 NewPositionForCurrentBodyPart = PreviousBodyPart.position;
+            float Step = Time.deltaTime * CurrentDistBetweenBodyParts / BodyPartsMinDistance * Speed;
+            if (Step > BodyPartsMinDistance)
             {
-                CurrentBodyPart = BodyParts[i];
-                PreviousBodyPart = BodyParts[i - 1];
-                CurrentDistBetweenBodyParts = Vector3.Distance(PreviousBodyPart.position, CurrentBodyPart.position);
-                Vector3 NewPositionForCurrentBodyPart = PreviousBodyPart.position;
-                float Step = Time.deltaTime * CurrentDistBetweenBodyParts / BodyPartsMinDistance * Speed;
-                if (Step > BodyPartsMinDistance)
-                {
-                    Step = BodyPartsMinDistance;
-                }
-                if(Vector3.Distance(CurrentBodyPart.position,PreviousBodyPart.position) > BodyPartsMinDistance)
-                {
-                    CurrentBodyPart.position = Vector3.Slerp(CurrentBodyPart.position, NewPositionForCurrentBodyPart, Step);
-                    CurrentBodyPart.rotation = Quaternion.Slerp(CurrentBodyPart.rotation, PreviousBodyPart.rotation, Step);
-                }
-                //CurrentBodyPart.position = Vector3.Slerp(CurrentBodyPart.position, NewPositionForCurrentBodyPart, Step);
-                //CurrentBodyPart.rotation = Quaternion.Slerp(CurrentBodyPart.rotation, PreviousBodyPart.rotation, Step);
+                Step = BodyPartsMinDistance;
             }
+                //if(Vector3.Distance(CurrentBodyPart.position,PreviousBodyPart.position) > BodyPartsMinDistance)
+                //{
+                //    CurrentBodyPart.position = Vector3.Slerp(CurrentBodyPart.position, NewPositionForCurrentBodyPart, Step);
+                //    CurrentBodyPart.rotation = Quaternion.Slerp(CurrentBodyPart.rotation, PreviousBodyPart.rotation, Step);
+                //}
+             CurrentBodyPart.position = Vector3.Slerp(CurrentBodyPart.position, NewPositionForCurrentBodyPart, Step);
+             CurrentBodyPart.rotation = Quaternion.Slerp(CurrentBodyPart.rotation, PreviousBodyPart.rotation, Step);
         }
     }
 

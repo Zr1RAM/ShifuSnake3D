@@ -15,8 +15,9 @@ public class GameManager : MonoBehaviour
     public MapController mapController;
     public SteeringWheelController steeringWheelController;
     public UIManager uiManager;
+    public SoundsManager soundsManager;
     //[HideInInspector]
-    public bool isPlaying = true; // indicates if the game is in play or pause
+    public bool isPlaying = false; // indicates if the game is in play or pause
     [HideInInspector]
     public GameObject PlayerObject;
     public static GameManager gameManagerInstance;
@@ -40,7 +41,8 @@ public class GameManager : MonoBehaviour
      
     public void StartGame()
     {
-        isPlaying = true;
+        PlayPause(true);
+        uiManager.InvokeStartGameEvent();
     }
     public void PlayPause(bool val)
     {

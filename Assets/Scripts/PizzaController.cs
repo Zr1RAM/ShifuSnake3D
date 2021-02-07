@@ -25,7 +25,7 @@ public class PizzaController : MonoBehaviour
     {
         PizzaAnimator = GetComponent<Animator>();
         PizzaCollider = GetComponent<BoxCollider>();
-        SpawnPizza(); // Should be called in Game start event
+        //SpawnPizza(); // Should be called in Game start event
         Timer = PizzaTimer;
     }
     void Update()
