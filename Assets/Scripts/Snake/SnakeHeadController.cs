@@ -9,7 +9,7 @@ public class SnakeHeadController : MonoBehaviour
     {
         if(other.transform.CompareTag("Wall"))
         {
-            SnakeRecoilMovement(other.contacts[0].normal);
+            SnakeWallRebound(other.contacts[0].normal);
         }
         if(other.transform.CompareTag("Tile"))
         {
@@ -20,10 +20,11 @@ public class SnakeHeadController : MonoBehaviour
             SnakeEatsPizza(other.transform);
         }
     }
-    void SnakeRecoilMovement(Vector3 wallNormal)
+    void SnakeWallRebound(Vector3 wallNormal)
     {
         Vector3 ReboundDirection = Vector3.Reflect(transform.forward, wallNormal);
         transform.rotation = Quaternion.LookRotation(ReboundDirection);
+        GameManager.gameManagerInstance.PlayWallBounceSoundFromSoundManager();
     }
     void SnakeWalkedOnTile(string val)
     {

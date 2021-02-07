@@ -21,7 +21,6 @@ public class SnakeController : MonoBehaviour
     Transform CurrentBodyPart;
     Transform PreviousBodyPart;
 
-
     // Start is called before the first frame update
     void Start()
     {

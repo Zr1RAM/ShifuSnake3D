@@ -71,6 +71,7 @@ public class GameManager : MonoBehaviour
     {
         Score++;
         uiManager.UpdateScore(Score);
+        soundsManager.PlayScoredSound();
     }
     public float GetSteeringWheelAxis()
     {
@@ -79,5 +80,13 @@ public class GameManager : MonoBehaviour
     public Vector3 GetAvailableTilePositionInMap()
     {
         return mapController.AvailableTilePosition();
+    }
+    public void PlayWallBounceSoundFromSoundManager()
+    {
+        soundsManager.PlayWallBounceSound();
+    }
+    public void PlayPizzaLostSoundFromSoundManager()
+    {
+        soundsManager.PlayPizzaLostSound();
     }
 }

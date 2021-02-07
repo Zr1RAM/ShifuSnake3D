@@ -46,9 +46,7 @@ public class PizzaController : MonoBehaviour
     {
         if(Timer <= 0)
         {
-            SpawnPizza();
-            PizzaAnimator.SetTrigger("TimerOver");
-            Timer = PizzaTimer;
+            RespawnPizzaOnTimerOver();
         }
         else
         {
@@ -56,7 +54,7 @@ public class PizzaController : MonoBehaviour
             PizzaTimeRunningOutSoon();
         }
     }
-    public void OnPizzaTimerOver()
+    public void OnPizzaTimerOver() // animation event.. work in progress
     {
         print("called on animation over?");
         SpawnPizza();
@@ -72,5 +70,12 @@ public class PizzaController : MonoBehaviour
         {
             transform.localScale = Vector3.one * (Timer / PizzaCutOffTimer);
         }
+    }
+    void RespawnPizzaOnTimerOver()
+    {
+        SpawnPizza();
+        PizzaAnimator.SetTrigger("TimerOver");
+        Timer = PizzaTimer;
+        GameManager.gameManagerInstance.PlayPizzaLostSoundFromSoundManager();
     }
 }
