@@ -737,6 +737,41 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1675956898366043593, guid: 1746217a3e882d54389b25aad55bfa26,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1675956898366043593, guid: 1746217a3e882d54389b25aad55bfa26,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1675956898366043593, guid: 1746217a3e882d54389b25aad55bfa26,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 1783548397}
+    - target: {fileID: 1675956898366043593, guid: 1746217a3e882d54389b25aad55bfa26,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1675956898366043593, guid: 1746217a3e882d54389b25aad55bfa26,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: UpdateLeaderBoardText
+      objectReference: {fileID: 0}
+    - target: {fileID: 1675956898366043593, guid: 1746217a3e882d54389b25aad55bfa26,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_BoolArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1675956898366043593, guid: 1746217a3e882d54389b25aad55bfa26,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1746217a3e882d54389b25aad55bfa26, type: 3}
 --- !u!1 &963194225
@@ -1124,8 +1159,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SnakeSpeed: 0
-  MapWidth: 4
-  MapHeight: 4
+  MapWidth: 15
+  MapHeight: 12
   PizzaTimer: 0
   Score: 0
   mapController: {fileID: 1216251522}
@@ -1134,7 +1169,7 @@ MonoBehaviour:
   soundsManager: {fileID: 2072681427}
   isPlaying: 0
   PlayerObject: {fileID: 0}
-  MaxNumOfHighScores: 0
+  MaxNumOfHighScores: 4
 --- !u!4 &1783548398
 Transform:
   m_ObjectHideFlags: 0

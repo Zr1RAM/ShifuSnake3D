@@ -26,7 +26,13 @@ public class GameManager : MonoBehaviour
     public static GameManager gameManagerInstance;
     void Awake()
     {
-        Initialise();    
+        Initialise();
+        //for (int i = 0; i < MaxNumOfHighScores; i++)
+        //{
+        //    string PlayerName = PlayerPrefs.GetString("PlayerName" + i.ToString());
+        //    int HighScore = PlayerPrefs.GetInt("PlayerScore" + i.ToString());
+        //    print("Player name: " + PlayerName + " HighScore: " + HighScore.ToString());
+        //}
     }
     void Initialise()
     {
@@ -45,6 +51,7 @@ public class GameManager : MonoBehaviour
     {
         PlayPause(true);
         uiManager.InvokeStartGameEvent();
+        InitializeLeaderBoard();
     }
     public void PlayPause(bool val)
     {
@@ -63,7 +70,7 @@ public class GameManager : MonoBehaviour
     {
         PlayPause(false);
         uiManager.InvokeGameOverEvent();
-        CheckWithLeaderBoard();
+        UpdateLeaderboard();
     }
     public void RestartGame()
     {
@@ -92,8 +99,21 @@ public class GameManager : MonoBehaviour
     {
         soundsManager.PlayPizzaLostSound();
     }
-    void CheckWithLeaderBoard()
+    void UpdateLeaderboard()
     {
-
+        leaderboards.AddToLeaderBoard(new LeaderBoardItem("",Score));
+        uiManager.UpdateLeaderBoardText(leaderboards.GetLeaderboardItems());
+    }
+    void InitializeLeaderBoard()
+    {
+        leaderboards = new Leaderboards();
+        if (leaderboards.leaderboardItems == null)
+        {
+            leaderboards = new Leaderboards(MaxNumOfHighScores);
+        }
+    }
+    public void UpdateLeaderBoardText()
+    {
+        uiManager.UpdateLeaderBoardText(leaderboards.GetLeaderboardItems());
     }
 }

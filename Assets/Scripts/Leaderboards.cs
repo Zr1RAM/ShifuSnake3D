@@ -1,14 +1,15 @@
-﻿using JetBrains.Annotations;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Leaderboards
 {
-    public LeaderBoardItem[] leaderboardItems;
+    public List<LeaderBoardItem> leaderboardItems;
+    int TotalHighScores;
     public Leaderboards()
     {
-        if(GetTotalHighScores() != 0)
+        TotalHighScores = GetTotalHighScores();
+        if(TotalHighScores != 0)
         {
             SetLeaderboardItems();
         }
@@ -16,26 +17,30 @@ public class Leaderboards
     public Leaderboards(int val)
     {
         ClearLeaderBoard();
-        SetMaxHighScores(val);
+        SetTotalHighScores(val);
+        SetLeaderboardItems();
     }
     public void SetLeaderboardItems()
     {
         int NumberOfHighScores = PlayerPrefs.GetInt("TotalScores");
-        leaderboardItems = new LeaderBoardItem[NumberOfHighScores];
+        leaderboardItems = new List<LeaderBoardItem>();
         string PlayerName;
         int HighScore;
         for(int i = 0; i < NumberOfHighScores; i++)
         {
-            PlayerName = PlayerPrefs.GetString("PlayerName" + i.ToString());
             HighScore = PlayerPrefs.GetInt("PlayerScore" + i.ToString());
-            leaderboardItems[i] = new LeaderBoardItem(PlayerName, HighScore);
+            if (HighScore != 0)
+            {
+                PlayerName = PlayerPrefs.GetString("PlayerName" + i.ToString());
+                leaderboardItems.Add(new LeaderBoardItem(PlayerName, HighScore));
+            }
         }
     }
-    public LeaderBoardItem[] GetLeaderboardItems()
+    public List<LeaderBoardItem> GetLeaderboardItems()
     {
         return leaderboardItems;
     }
-    public void SetMaxHighScores(int val)
+    public void SetTotalHighScores(int val)
     {
         PlayerPrefs.SetInt("TotalScores",val);
     }
@@ -49,18 +54,27 @@ public class Leaderboards
     }
     public void AddToLeaderBoard(LeaderBoardItem val)
     {
-        for(int i = 0; i < GetTotalHighScores(); i++)
+        if(val.PlayerName == "")
         {
-            if(val.HighScore > PlayerPrefs.GetInt("PlayerScore" + i.ToString()))
-            {
-                AddtoLeaderBoardAt(val,i);
-                break;
-            }
+            val.PlayerName = "Player" + leaderboardItems.Count.ToString();
         }
+        leaderboardItems.Add(val);
+        leaderboardItems.Sort(delegate (LeaderBoardItem x, LeaderBoardItem y) {
+            return x.HighScore.CompareTo(y.HighScore);
+        });
+        if(leaderboardItems.Count > TotalHighScores && TotalHighScores != 0)
+        {
+            leaderboardItems.RemoveRange(TotalHighScores,leaderboardItems.Count -1);
+        }
+        SaveLeaderBoardItems();
     }
-    void AddtoLeaderBoardAt(LeaderBoardItem val,int LeaderBoardIndex)
+    void SaveLeaderBoardItems()
     {
-        PlayerPrefs.SetString("PlayerName" + LeaderBoardIndex.ToString(), val.PlayerName);
-        PlayerPrefs.SetInt("PlayerScore" + LeaderBoardIndex.ToString(),val.HighScore);
+        for(int i = 0; i < leaderboardItems.Count; i++)
+        {
+            PlayerPrefs.SetString("PlayerName" + i.ToString(), leaderboardItems[i].PlayerName);
+            PlayerPrefs.SetInt("PlayerScore" + i.ToString(), leaderboardItems[i].HighScore);
+        }
+        PlayerPrefs.Save();
     }
 }

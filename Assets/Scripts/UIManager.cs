@@ -35,5 +35,16 @@ public class UIManager : MonoBehaviour
             StartGameEvent.Invoke();
         }
     }
+    public void UpdateLeaderBoardText(List<LeaderBoardItem> val)
+    {
+        LeaderboardText.text = "";
+        for (int i = val.Count - 1; i >= 0; i--)
+        { 
+            if(val[i].HighScore != 0)
+            {
+                LeaderboardText.text += val[i].PlayerName + " " + val[i].HighScore.ToString() + "\n";
+            }
+        }
+    }
 
 }
