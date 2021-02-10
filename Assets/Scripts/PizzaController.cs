@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Class that handles pizza spawning and other pizza related scenarios.
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,21 +7,24 @@ using UnityEngine;
 public class PizzaController : MonoBehaviour
 {
     [SerializeField]
-    float PizzaTimer;
+    float PizzaTimer; // Timer before Pizza respawns in different location.
     [SerializeField]
-    float PizzaCutOffTimer; //Timer value for when pizza is almost gone 
+    float PizzaCutOffTimer; //Timer value for when pizza is almost gone. (This is currently not working)
     [SerializeField]
-    float Timer;
+    float Timer; //Current value of timer.
     BoxCollider PizzaCollider;
     Animator PizzaAnimator;
+    // Function to spawn pizza.
     public void SpawnPizza()
     {
-        transform.position = GameManager.gameManagerInstance.GetAvailableTilePositionInMap();
+        // Get random Position from tiles not touched by the snake.
+        transform.position = GameManager.gameManagerInstance.GetAvailableTilePositionInMap(); 
         transform.localScale = Vector3.one;
         PizzaCollider.enabled = true;
         transform.GetChild(0).gameObject.SetActive(true);
         PizzaAnimator.SetTrigger("PizzaSpawned");
     }
+    // Initializing PizzaController 
     void Start()
     {
         PizzaAnimator = GetComponent<Animator>();
@@ -35,6 +39,7 @@ public class PizzaController : MonoBehaviour
             TimerClock();
         }    
     }
+    // Called when pizza is eaten by snake.
     public void PizzaEaten()
     {
         GameManager.gameManagerInstance.PlayerScored();
@@ -54,7 +59,7 @@ public class PizzaController : MonoBehaviour
             PizzaTimeRunningOutSoon();
         }
     }
-    public void OnPizzaTimerOver() // animation event.. work in progress
+    public void OnPizzaTimerOver() // Animation event.. work in progress
     {
         print("called on animation over?");
         SpawnPizza();
@@ -66,7 +71,7 @@ public class PizzaController : MonoBehaviour
     }
     void PizzaTimeRunningOutSoon()
     {
-        if (Timer <= PizzaCutOffTimer)
+        if (Timer < PizzaCutOffTimer)
         {
             transform.localScale = Vector3.one * (Timer / PizzaCutOffTimer);
         }

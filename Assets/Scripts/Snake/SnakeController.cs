@@ -1,4 +1,8 @@
-﻿using System.Collections;
+﻿// SnakeController and SnakeHeadController could have been ideally a single script that handles the snake behaviour
+// But due to facing some issues with that approach of having the body parts as child object of the head, it has been broken
+// into two Components.
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 

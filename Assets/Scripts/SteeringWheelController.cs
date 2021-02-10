@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿// Class that handles the steering wheel image rotation as well as provides the steering wheel axis value.
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
