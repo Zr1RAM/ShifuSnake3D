@@ -1,3 +1,7 @@
+// Singleton pattern used to create the Game Manager script that holds important refernces required by other classes / componenets as well as 
+// provides the functions for the different game starts such as game start , pause , resume, restart , game over , etc
+
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -46,13 +50,14 @@ public class GameManager : MonoBehaviour
         }
         uiManager.InitializeUIManager();
     }
-     
+    // Used to start the game.
     public void StartGame()
     {
         PlayPause(true);
         uiManager.InvokeStartGameEvent();
         InitializeLeaderBoard();
     }
+    // Used to toggle play and pause state.
     public void PlayPause(bool val)
     {
         if (val) // true means we are resuming 

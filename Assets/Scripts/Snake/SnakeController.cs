@@ -1,22 +1,23 @@
 ﻿// SnakeController and SnakeHeadController could have been ideally a single script that handles the snake behaviour
-// But due to facing some issues with that approach of having the body parts as child object of the head, it has been broken
+// But due to some issues with that approach of having the body parts as child object of the head, it has been broken
 // into two Components.
 
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class SnakeController : MonoBehaviour
 {
 
-    public List<Transform> BodyParts;// = new List<Transform>();
+    public List<Transform> BodyParts;// List of Body trails that will follow the snake.
 
-    public float BodyPartsMinDistance = 0.25f;
+    public float BodyPartsMinDistance = 0.25f; // Minimum distance between each body part / bone.
 
-    public int SnakeSize;
+    public int SnakeSize; // Number of snake segments.
     
-    public float Speed = 1;
-    public float RotationSpeed = 50;
+    public float Speed = 1; // Speed of snake Note : there is already a parameter in game manager which I forgot to remove.
+    public float RotationSpeed = 50; // 
 
     [SerializeField]
     GameObject BodyPrefab;
@@ -28,7 +29,7 @@ public class SnakeController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameManager.gameManagerInstance.PlayerObject = BodyParts[0].gameObject;
+        GameManager.gameManagerInstance.PlayerObject = BodyParts[0].gameObject; // Set reference to player object if ever needed to be accessed by other components. In the end its reference was not needed.
         //SpawnBodyParts(); //Should be called in Game start event
     }
 
@@ -40,13 +41,14 @@ public class SnakeController : MonoBehaviour
             Move();
         }
     }
+    // Used to move the head and the body parts of the snake.
     public void Move()
     {
         BodyParts[0].Translate(BodyParts[0].forward * Speed * Time.deltaTime, Space.World);
 #if UNITY_EDITOR
         if (Input.GetAxis("Horizontal") != 0)
         {
-            BodyParts[0].Rotate(Vector3.up * RotationSpeed * Time.deltaTime * Input.GetAxis("Horizontal"));
+            BodyParts[0].Rotate(Vector3.up * RotationSpeed * Time.deltaTime * Input.GetAxis("Horizontal")); // For testing in editor without using the steering wheel to turn.
         }
 #endif
         if (GameManager.gameManagerInstance.GetSteeringWheelAxis() != 0)
@@ -73,8 +75,8 @@ public class SnakeController : MonoBehaviour
              CurrentBodyPart.rotation = Quaternion.Slerp(CurrentBodyPart.rotation, PreviousBodyPart.rotation, Step);
         }
     }
-
-    public void SpawnBodyParts() // used to spawn and respawwn Snake
+    // Used to spawn and respawwn Snake.
+    public void SpawnBodyParts() 
     {
         float SnakeHeadXpos, SnakeHeadZpos;
         SnakeHeadXpos = Random.Range(0,GameManager.gameManagerInstance.MapWidth) + 0.5f;
@@ -101,6 +103,7 @@ public class SnakeController : MonoBehaviour
             }
         }
     }
+    // Used to reset the prefab transform as the transform values seems to get modified. Not sure if it is an engine bug or if this is how prefabs work now.
     void OnApplicationQuit()
     {
         BodyPrefab.transform.position = Vector3.zero;
